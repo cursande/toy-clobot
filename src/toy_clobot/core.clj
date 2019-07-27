@@ -28,8 +28,8 @@
     (cond
       (command-matches? command-type #"PLACE")
       :place
-      (command-matches? command-type #"(NORTH|EAST|SOUTH|WEST)")
-      :direction
+      (command-matches? command-type #"(LEFT|RIGHT)")
+      :turn
       (command-matches? command-type #"MOVE")
       :move
       (command-matches? command-type #"REPORT")
