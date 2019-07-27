@@ -11,8 +11,8 @@
 ;;   - Dockerise it [  ]
 
 (def table-dimensions
-  "Default width and height of table in units"
-  {:width 5 :height 5})
+  "Default width and height of table in units, assuming SW corner is (0,0)"
+  {:width 4 :height 4})
 
 (def directions
   "Valid directions"
