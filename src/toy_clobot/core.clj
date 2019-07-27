@@ -1,6 +1,15 @@
 (ns toy-clobot.core
   (:require [clojure.string :refer [split split-lines]]))
 
+;; - Handle the next command [ ]
+;;   - placement [ ]
+;;   - direction change [x]
+;;   - a forward move [ ]
+;;     - CHECK if next move is valid, skip if not valid
+;;   - reporting [ ]
+;;     - print (x: x, y: y, dir: f) to stdout
+;;   - Dockerise it [  ]
+
 (def board-dimensions
   "Default width and height of board in units"
   {:width 5 :height 5})
@@ -25,6 +34,13 @@
       :move
       (command-matches? command-type #"REPORT")
       :report)))
+
+(defn new-direction [current turn-dir]
+ "Will just throw for now if the direction is not valid"
+  (let [current-index (.indexOf directions current)] ; TODO: This is pretty gross
+  (case turn-dir
+    :RIGHT (get directions (+ current-index 1) :NORTH)
+    :LEFT (get directions (- current-index 1) :WEST))))
 
 (defn -main [arg]
   (let [commands (-> arg
