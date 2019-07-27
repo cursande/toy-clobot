@@ -1,7 +1,8 @@
 (ns toy-clobot.core-test
   (:require [clojure.test :refer :all]
             [toy-clobot.core :refer [parse-command-type
-                                     new-direction]]))
+                                     new-direction
+                                     set-robot-position]]))
 
 (deftest test-parse-command-type
   (testing "it correctly recognises a place command"
@@ -28,3 +29,17 @@
           turn-dir :LEFT]
       (is (= (new-direction current turn-dir)
              :WEST)))))
+
+(deftest test-set-robot-position
+  (testing "it will return the robot's new coordinate map if the coordinates are valid"
+    (let [x 3
+          y 2
+          f :NORTH]
+      (is (= (set-robot-position x y f)
+             {:x 3 :y 2 :f :NORTH}))))
+  (testing "it will return an empty map if they are not valid"
+    (let [x 3
+          y 6
+          f :WEST]
+      (is (= (set-robot-position x y f)
+             {})))))

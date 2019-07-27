@@ -2,7 +2,7 @@
   (:require [clojure.string :refer [split split-lines]]))
 
 ;; - Handle the next command [ ]
-;;   - placement [ ]
+;;   - placement [x]
 ;;   - direction change [x]
 ;;   - a forward move [ ]
 ;;     - CHECK if next move is valid, skip if not valid
@@ -10,8 +10,8 @@
 ;;     - print (x: x, y: y, dir: f) to stdout
 ;;   - Dockerise it [  ]
 
-(def board-dimensions
-  "Default width and height of board in units"
+(def table-dimensions
+  "Default width and height of table in units"
   {:width 5 :height 5})
 
 (def directions
@@ -34,6 +34,18 @@
       :move
       (command-matches? command-type #"REPORT")
       :report)))
+
+(defn set-robot-position
+  "Place the robot in valid coordinates"
+  [x y f]
+  (let [valid-x-and-y? (fn [x y]
+                         (and (<= x (:width table-dimensions))
+                              (> x 0)
+                              (<= y (:height table-dimensions))
+                              (> y 0)))]
+    (if (valid-x-and-y? x y)
+      {:x x :y y :f f}
+      {})))
 
 (defn new-direction [current turn-dir]
  "Will just throw for now if the direction is not valid"
