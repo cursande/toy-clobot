@@ -1,6 +1,9 @@
 (ns toy-clobot.core)
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(def board-dimensions
+  "Default width and height of board in units"
+  {:width 5 :height 5})
+
+(def directions
+  "Valid directions"
+  [:NORTH :EAST :SOUTH :WEST])
