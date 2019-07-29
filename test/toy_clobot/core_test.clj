@@ -1,30 +1,26 @@
 (ns toy-clobot.core-test
   (:require [clojure.test :refer :all]
-            [toy-clobot.core :refer [parse-command-type
-                                     new-direction]]))
+            [toy-clobot.core :refer :all]))
 
-(deftest test-parse-command-type
-  (testing "it correctly recognises a place command"
-    (let [command "PLACE 1,4,NORTH"]
-      (is (= (parse-command-type command)
-             :place))))
-  (testing "it correctly recognises a turn command"
-    (let [command "RIGHT"]
-      (is (= (parse-command-type command)
-             :turn))))
-  (testing "it correctly recognises a move command"
-    (let [command "MOVE"]
-      (is (= (parse-command-type command)
-             :move)))))
-
-(deftest test-new-direction
-  (testing "it returns the new direction after turning"
-    (let [current :EAST
-          turn-dir :RIGHT]
-      (is (= (new-direction current turn-dir)
-             :SOUTH))))
-  (testing "it can handle out-of-bounds values"
-    (let [current :NORTH
-          turn-dir :LEFT]
-      (is (= (new-direction current turn-dir)
-             :WEST)))))
+(deftest test-run-robot-commands
+  (testing "runs a list of commands"
+    (let [commands ["PLACE 1,2,NORTH"
+                    "MOVE"
+                    "RIGHT"
+                    "RIGHT"
+                    "MOVE"
+                    "LEFT"
+                    "MOVE"
+                    "REPORT"]]
+      (is (= (with-out-str (run-robot-commands commands))
+             (str "Current position: [ X: 2, Y: 2, F: EAST ]\n"
+                  "All commands complete\n")))))
+  (testing "it only reports coordinates for the robot if it is on the table"
+    (let [commands ["PLACE 7,6,NORTH"
+                    "MOVE"
+                    "REPORT"
+                    "PLACE 4,4,NORTH"
+                    "REPORT"]]
+      (is (= (with-out-str (run-robot-commands commands))
+             (str "Current position: [ X: 4, Y: 4, F: NORTH ]\n"
+                  "All commands complete\n"))))))
